@@ -8,7 +8,9 @@ from flask.cli import with_appcontext
 
 
 def get_db():
-	pass
+    return firestore.client()
 
 def init_db():
-	pass
+    cred = credentials.Certificate(current_app.config["DATABASE"])
+    firebase_admin.initialize_app(cred)
+    db = firestore.client()
