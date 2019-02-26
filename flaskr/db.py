@@ -13,3 +13,4 @@ def get_db():
 def init_db():
     cred = credentials.Certificate(current_app.config["DATABASE"])
     firebase_admin.initialize_app(cred)
+    print("DATABASE INITIALIZED")

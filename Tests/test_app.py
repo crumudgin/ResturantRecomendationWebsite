@@ -30,9 +30,11 @@ def test_index(client):
     assert response.status_code == 200
     assert response.data == b'Hello, World!'
 
+
 def test_database(client):
     """ Test that the database connects"""
     assert isinstance(get_db(), type(firestore.client()))
+
 
 @pytest.mark.parametrize(("address",                 "categories",                      "finished", "link",       "name",      "num", "state", "zip_code"),
                         [("1234 test St. OH, 43235", {"0" : "a", "1" : "b", "2" : "c"}, True,       "/test/link", "resturant",  1234, "OH",    7760),  # Test basic resturant creation
