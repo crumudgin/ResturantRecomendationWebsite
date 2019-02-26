@@ -86,7 +86,7 @@ def define_model(user_dim, res_dim):
 	# res_dense = Dense(20, activation="relu")(res_vec)
 
 	embedings_togeather = Concatenate()([user_vec, res_vec])
-	dense = Dense(9408)(embedings_togeather)
+	dense = Dense(9408, name="first_dense")(embedings_togeather)
 	embedings_img = Reshape([56,56,3])(dense)
 	padded = ZeroPadding2D((3, 3))(embedings_img)
 	c1 = Conv2D(8, (7, 7), strides=(2, 2))(padded)
@@ -108,7 +108,7 @@ def define_model(user_dim, res_dim):
 
 	x = Flatten()(x)
 
-	out = Dense(5)(x)
+	out = Dense(5, name="final_dense")(x)
 
 	model = Model(inputs=[user_input, resturant_input], outputs=out)
 

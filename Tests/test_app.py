@@ -9,6 +9,9 @@ from flaskr import create_app
 from flaskr.db import get_db, init_db
 from flaskr.models.resturant import Resturant
 from firebase_admin import firestore
+from unittest import mock
+
+from flaskr.endpoints.search import search
 
 @pytest.fixture
 def app():
@@ -24,11 +27,11 @@ def client(app):
     return app.test_client()
 
 
-def test_index(client):
+def test_index_endpoint(client):
     """ Test that the server works at the most basic of levels """
     response = client.get("/")
     assert response.status_code == 200
-    assert response.data == b'Hello, World!'
+    assert response.data == b'{"hello": "world"}'
 
 
 def test_database(client):
@@ -45,4 +48,16 @@ def test_resturant_creation(client, address, categories, finished, link, name, n
     resturant_from_dict = Resturant.from_dict(resturant.to_dict())
     assert resturant.hashed_name == hashlib.sha224(resturant.name.encode("utf-8")).hexdigest()
     assert resturant_from_dict == resturant
+
+@pytest.mark.parametrize(("resturants", "ratings", "expected_results"),
+                        [((Resturant("1234 test St. OH, 43235", {"0" : "a"}, True, "/test/link", "resturant", 1, "OH", 43235),), [[0, 0, 0, 0, 1]], [{"link" : "/test/link", "rating" : "1"}]),
+                         ((Resturant("1234 test St. OH, 43235", {"0" : "a"}, True, "/test/", "resturant", 1, "OH", 43235),), [[0, 0, 0, 0, 1]], [{"link" : "/test/", "rating" : "1"}]),
+                         ((Resturant("1234 test St. OH, 43235", {"0" : "a"}, True, "/test/link", "resturant", 1, "OH", 43235),), [[0, 0, 0, 1, 0]], []),
+                        ])
+def test_search(resturants, ratings, expected_results):
+    model = mock.Mock()
+    model.predict.return_value = ratings
+    results = search(model, resturants)
+    assert results == expected_results
+
 

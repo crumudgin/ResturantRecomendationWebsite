@@ -1,28 +1,15 @@
 import os
 
-import numpy as np
-
 from flask import Flask
 from flaskr.db import init_db, get_db
 from flaskr.machine_learning.recomendation_model import *
-
-def recomend_based_on_zip(model, zip_codes, user_num):
-	resturants, nums = resturants_from_zip(zip_codes)
-	links = [i["link"] for i in resturants]
-	nums = np.array(nums)
-	ratings = model.predict([np.full_like(nums, user_num), nums])
-	# ratings, links = sort_lists(ratings, links)
-	for index, rating in enumerate(ratings):
-		highest = rating[0]
-		highest_index = 0
-		for rating_index, i in enumerate(rating):
-			if i > highest:
-				highest = i
-				highest_index = rating_index
+from flaskr.endpoints.index import index
+from flaskr.endpoints.search import search
+from flask_api import FlaskAPI
 
 def create_app(test_config=None):
 
-    app = Flask(__name__, instance_relative_config=True)
+    app =  FlaskAPI(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE="real_cert.json",
@@ -45,21 +32,21 @@ def create_app(test_config=None):
         try:
             init_db()
         except:
-            pass
-    m = old_model()
+            print("I'm doing it again")
     print("ready and waiting")
 
     # a simple page that says hello
-    @app.route('/')
-    def hello():
+    @app.route('/', methods=['GET'])
+    def hello_endpoint():
+        return index()
+
+    @app.route('/search/', methods=['GET'])
+    def search_endpoint():
         db = get_db()
         doc = db.collection(u"training_resturants")
         resturants = doc.where(u"zip_code", u"==", 43235).get()
-        nums = [i.to_dict()["num"] for i  in resturants]
-        nums = np.array(nums)
-        ratings = m.predict([np.full_like(nums, 569), nums])
-        # for i, rating in enumerate(ratings):
-        #     print(rating)
-        return 'Hello, World!'
+        m = old_model()
+        m._make_predict_function()
+        return search(m, resturants)
 
     return app

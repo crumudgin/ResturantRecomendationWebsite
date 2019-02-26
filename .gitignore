@@ -4,3 +4,5 @@ test_cert.json
 model.h5
 model.json
 real_cert.json
+*.h5
+model_1.json
