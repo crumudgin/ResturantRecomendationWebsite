@@ -1,3 +1,6 @@
 
 test_cert.json
 *.pyc
+model.h5
+model.json
+real_cert.json
