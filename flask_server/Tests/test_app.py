@@ -1,6 +1,7 @@
 import os
 import tempfile
 import hashlib
+import json
 from unittest import mock
 
 import pytest
@@ -11,7 +12,7 @@ import config
 
 @pytest.fixture
 def app():
-    app = create_app("test.cfg")
+    app = create_app(config.TestConfig)
 
     return app
 
@@ -36,3 +37,11 @@ def test_prod_config():
     assert config.ProdConfig.TESTING == False
     assert config.ProdConfig.DATABASE == "real_cert.json"
     assert config.ProdConfig.SECRET_KEY == ""
+
+def test_api_endpoint(client):
+    response = client.get("/api/v1/endpoint")
+    assert response.status_code == 200
+    data = json.loads(response.data)
+    assert data == {
+        "Hello" : "World!"
+    }

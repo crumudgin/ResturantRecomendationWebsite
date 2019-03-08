@@ -1,9 +1,13 @@
 from flask import Flask
 
-def create_app(environment):
+from .api import api as api_blueprint
+
+def create_app(config):
     
     app = Flask(__name__)
 
-    with open(environment) as env:
-        app.config.from_envvar(env)
+    app.config.from_object(config)
+
+    app.register_blueprint(api_blueprint, url_prefix="/api/v1")
+
     return app
