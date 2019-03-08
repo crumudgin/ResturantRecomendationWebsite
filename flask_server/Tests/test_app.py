@@ -5,8 +5,10 @@ import json
 from unittest import mock
 
 import pytest
+from firebase_admin import firestore
 
 from app import create_app
+from app.db import get_db
 import config
 
 
@@ -27,3 +29,8 @@ def test_api_endpoint(client):
     assert data == {
         "Hello" : "World!"
     }
+
+def test_database(app):
+    """ Test that the database connects"""
+    assert isinstance(get_db(), type(firestore.client()))
+
