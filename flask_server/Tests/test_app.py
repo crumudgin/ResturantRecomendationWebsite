@@ -41,3 +41,4 @@ def test_resturant_creation(client, address, categories, finished, link, name, n
     resturant_from_dict = Resturant.from_dict(resturant.to_dict())
     assert resturant.hashed_name == hashlib.sha224(resturant.name.encode("utf-8")).hexdigest()
     assert resturant_from_dict == resturant
+    assert resturant != 5
