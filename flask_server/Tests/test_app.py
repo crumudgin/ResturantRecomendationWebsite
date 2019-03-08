@@ -1,14 +1,12 @@
-import os
-import tempfile
 import hashlib
 import json
-from unittest import mock
 
 import pytest
 from firebase_admin import firestore
 
 from app import create_app
 from app.db import get_db
+from app.models.resturant import Resturant
 import config
 
 
@@ -34,3 +32,12 @@ def test_database(app):
     """ Test that the database connects"""
     assert isinstance(get_db(), type(firestore.client()))
 
+
+@pytest.mark.parametrize(("address",                 "categories",                      "finished", "link",       "name",      "num", "state", "zip_code"),
+                        [("1234 test St. OH, 43235", {"0" : "a", "1" : "b", "2" : "c"}, True,       "/test/link", "resturant",  1234, "OH",    7760),  # Test basic resturant creation
+                        ])
+def test_resturant_creation(client, address, categories, finished, link, name, num, state, zip_code):
+    resturant = Resturant(address, categories, finished, link, name, num, state, zip_code)
+    resturant_from_dict = Resturant.from_dict(resturant.to_dict())
+    assert resturant.hashed_name == hashlib.sha224(resturant.name.encode("utf-8")).hexdigest()
+    assert resturant_from_dict == resturant
