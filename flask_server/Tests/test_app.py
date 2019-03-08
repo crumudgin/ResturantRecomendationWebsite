@@ -21,3 +21,4 @@ def client(app):
 
 def test_configs():
     assert config.DevConfig.DEBUG == True
+    assert config.DevConfig.TESTING == False

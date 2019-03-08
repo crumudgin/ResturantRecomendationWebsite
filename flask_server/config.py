@@ -1,3 +1,4 @@
-class DevConfig(Config):
-    Debug = True
+class DevConfig():
+    DEBUG = True
+    TESTING = False
 
