@@ -35,6 +35,7 @@ def test_database(app):
 
 @pytest.mark.parametrize(("address",                 "categories",                      "finished", "link",       "name",      "num", "state", "zip_code"),
                         [("1234 test St. OH, 43235", {"0" : "a", "1" : "b", "2" : "c"}, True,       "/test/link", "resturant",  1234, "OH",    7760),  # Test basic resturant creation
+                         ("test",                    {"0" : "a", "1" : "b"},            False,      "test",       "test",       1,    "TEST",  1)      # Test that the resturant creation works dynamicaly
                         ])
 def test_resturant_creation(client, address, categories, finished, link, name, num, state, zip_code):
     resturant = Resturant(address, categories, finished, link, name, num, state, zip_code)
