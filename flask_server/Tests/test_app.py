@@ -22,3 +22,4 @@ def client(app):
 def test_configs():
     assert config.DevConfig.DEBUG == True
     assert config.DevConfig.TESTING == False
+    assert config.DevConfig.DATABASE == "real_cert.json"
