@@ -4,6 +4,7 @@ from keras.models import *
 from keras import backend as K
 import tensorflow as tf
 import os
+from ..db import get_db
 
 np.random.seed(1)
 EMBEDING_SIZE = 32
