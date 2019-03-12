@@ -1,4 +1,4 @@
-from flask import g, jsonify
+from flask import g, jsonify, request
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash
 
@@ -32,7 +32,7 @@ def verify_password(email_or_token, password):
 @api.before_request
 @auth.login_required
 def before_request():
-    if g.current_user is None:
+    if g.current_user is None and request.endpoint != "search":
         return forbidden('Unconfirmed account')
 
 
