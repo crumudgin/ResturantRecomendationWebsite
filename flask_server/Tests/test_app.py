@@ -42,15 +42,16 @@ def test_resturant_creation(client, address, categories, finished, link, name, n
     assert resturant_from_dict == resturant
     assert resturant != 5
 
-@pytest.mark.parametrize(("num", "name"),
-                        [(1,     "test"),
-                         (2,     "second")
+@pytest.mark.parametrize(("num", "name",   "email", "password"),
+                        [(1,     "test",   "test", "test"),
+                         (2,     "second", "email", "password")
                         ])
-def test_user_creation(num, name):
-    user = User(num, name)
+def test_user_creation(num, name, email, password):
+    user = User(num, name, email, password)
     assert user.num == num
     assert user.name == name
+    assert user.email == email
     assert user == User.from_dict(user.to_dict())
-    assert user != User(-1, "not the user")
+    assert user != User(-1, "not the user", "", "")
     assert user != 5
     
