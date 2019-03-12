@@ -60,4 +60,4 @@ class User:
 
         database = get_db()
         doc = database.collection(u"users").where(u"num", u"==", data["num"])
-        return User.from_dict(doc.get().to_dict())
+        return [User.from_dict(i.to_dict()) for i in doc.get()][0]
