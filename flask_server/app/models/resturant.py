@@ -42,3 +42,10 @@ class Resturant:
             return self.__dict__ == other.__dict__
         except:
             return False
+
+    def web_safe_address(self):
+        splitAddress = self.address.replace(".", "").split(" ")[:-1]
+        seperator="+"
+        return seperator.join(splitAddress)
+        
+        

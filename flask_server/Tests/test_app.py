@@ -42,6 +42,10 @@ def test_resturant_creation(client, address, categories, finished, link, name, n
     assert resturant_from_dict == resturant
     assert resturant != 5
 
+def test_web_safe_addr():
+    resturant = Resturant("1234 test St. Columbus, OH 43235", {"test": "test"}, True, "test", "test", 1, "OH", 43235)
+    assert resturant.web_safe_address() == "1234+test+St+Columbus,+OH"
+
 @pytest.mark.parametrize(("num", "name",   "email", "password"),
                         [(1,     "test",   "test", "test"),
                          (2,     "second", "email", "password")
