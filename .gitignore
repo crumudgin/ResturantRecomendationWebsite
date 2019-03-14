@@ -6,3 +6,4 @@ model.json
 real_cert.json
 *.h5
 model_1.json
+flask_server/.env

@@ -2,7 +2,7 @@ import hashlib
 
 class Resturant:
 
-    def __init__(self, address, categories, finished, link, name, num, state, zip_code):
+    def __init__(self, address, categories, finished, link, name, num, state=None, zip_code=None, latitude=None, longitude=None):
             self.hashed_name = hashlib.sha224(name.encode("utf-8")).hexdigest()
             self.address = address
             self.categories = categories
@@ -12,18 +12,28 @@ class Resturant:
             self.num = num
             self.state = state
             self.zip_code = zip_code
+            self.latitude = latitude
+            self.longitude = longitude
 
     @staticmethod
     def from_dict(resturant):
-        return Resturant(
+        params = [
             resturant["address"], 
             resturant["categories"], 
             resturant["finished"], 
             resturant["link"], 
             resturant["name"], 
-            resturant["num"], 
-            resturant["state"], 
-            resturant["zip_code"])
+            resturant["num"]
+            ]
+        if "state" in resturant and "zip_code" in resturant:
+            params.append(resturant["state"])
+            params.append(resturant["zip_code"])
+
+        if "latitude" in resturant and "longitude" in resturant:
+            params.append(resturant["latitude"])
+            params.append(resturant["longitude"])
+
+        return Resturant(*params)
 
     def to_dict(self):
         return {
@@ -34,7 +44,9 @@ class Resturant:
             "name" : self.name,
             "num" : self.num,
             "state" : self.state,
-            "zip_code" : self.zip_code
+            "zip_code" : self.zip_code,
+            "latitude" : self.latitude,
+            "longitude" : self.longitude
         }
 
     def __eq__(self, other):
